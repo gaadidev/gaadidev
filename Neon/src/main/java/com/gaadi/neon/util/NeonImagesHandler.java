@@ -326,7 +326,7 @@ public class NeonImagesHandler {
                             File newFile = NeonUtils.getImageOutputFile(activity, fileInfos.get(i).getFilePath(), NeonImagesHandler.getSingletonInstance().getGenericParam().getCustomParameters().getFolderName(), imageName, i);
                             if (newFile != null) {
                                 NeonUtils.copyFile(fileInfos.get(i).getFilePath(), newFile);
-                                NeonUtils.compressImage(75, newFile.getAbsolutePath(), 1024, 900);
+                                NeonUtils.compressImage(30, newFile.getAbsolutePath(), 1024, 900);
                                 NeonUtils.scanFile(activity, newFile.getAbsolutePath());
                                 FileInfo newFileInfo = fileInfos.get(i);
                                 newFileInfo.setFilePath(newFile.getAbsolutePath());
