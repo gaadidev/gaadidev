@@ -85,7 +85,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     }
 
     public void showTagImages() {
-        if(tagModels != null && tagModels.size() != 0){
+        if (tagModels != null && tagModels.size() != 0) {
             ImageTagModel imageTagModel = tagModels.get(currentTag);
             if ((cameraParams != null && cameraParams.getCustomParameters() != null) && cameraParams.getCustomParameters().showTagImage()) {
                 if (imageTagModel.getTagImages() != 0) {
@@ -212,8 +212,8 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
                     setResult(RESULT_OK);
                     finish();
                 }
-            }catch (Exception e){
-               e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
 
@@ -430,10 +430,12 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
 
     private void initialiazeCurrentTag() {
         for (int i = 0; i < NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().size(); i++) {
-            if (tagModels.get(i).isMandatory() &&
-                    !NeonImagesHandler.getSingletonInstance().checkImagesAvailableForTag(tagModels.get(i))) {
-                currentTag = i;
-                break;
+            if (i < tagModels.size()) {
+                if (tagModels.get(i).isMandatory() &&
+                        !NeonImagesHandler.getSingletonInstance().checkImagesAvailableForTag(tagModels.get(i))) {
+                    currentTag = i;
+                    break;
+                }
             }
         }
         if (currentTag == tagModels.size() - 1) {
