@@ -70,7 +70,7 @@ public class NeonNeutralActivity extends NeonBaseNeutralActivity implements View
                 setTitle(R.string.photos);
             }
             tabList.setVisibility(View.VISIBLE);
-            txtTagTitle.setVisibility(View.VISIBLE);
+            //txtTagTitle.setVisibility(View.VISIBLE);
             if (adapter == null) {
                 List<ImageTagModel> tagModels = new ArrayList<>();
                 if (NeonImagesHandler.getSingletonInstance().getGenericParam() != null &&
@@ -103,7 +103,7 @@ public class NeonNeutralActivity extends NeonBaseNeutralActivity implements View
             tabList.setAdapter(adapter);
         } else {
             tabList.setVisibility(View.GONE);
-            txtTagTitle.setVisibility(View.GONE);
+           // txtTagTitle.setVisibility(View.GONE);
             showMinCount.setVisibility(View.GONE);
             imageShowFragmentContainer.setVisibility(View.VISIBLE);
             if (NeonImagesHandler.getSingletonInstance() != null &&
