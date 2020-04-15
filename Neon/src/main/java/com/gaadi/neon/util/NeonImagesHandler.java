@@ -46,6 +46,7 @@ public class NeonImagesHandler {
     private String currentTag = "";
     private LibraryMode libraryMode;
     private int requestCode;
+    private int setCompressBy;
 
     private NeonImagesHandler() {
     }
@@ -310,6 +311,13 @@ public class NeonImagesHandler {
                 }
             }
             neonResponse.setImageCollection(fileInfos);
+
+            if (NeonImagesHandler.getSingletonInstance() != null && NeonImagesHandler.getSingletonInstance().getNeutralParam() != null &&
+                    NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters() != null &&
+                    NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters().getCompressBy() != 0) {
+                setCompressBy = NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters().getCompressBy();
+            }
+
             /*
              * if folder name is available then copy the selected image from gallery to that folder also
              * if image is selected from the same folder then don't copy(by comparing the path)*/
@@ -326,7 +334,10 @@ public class NeonImagesHandler {
                             File newFile = NeonUtils.getImageOutputFile(activity, fileInfos.get(i).getFilePath(), NeonImagesHandler.getSingletonInstance().getGenericParam().getCustomParameters().getFolderName(), imageName, i);
                             if (newFile != null) {
                                 NeonUtils.copyFile(fileInfos.get(i).getFilePath(), newFile);
-                                NeonUtils.compressImage(30, newFile.getAbsolutePath(), 1024, 900);
+                                if (setCompressBy != 0) {
+                                    NeonUtils.compressImage(setCompressBy, newFile.getAbsolutePath(), 1024, 900);
+                                }
+//                                NeonUtils.compressImage(30, newFile.getAbsolutePath(), 1024, 900);
                                 NeonUtils.scanFile(activity, newFile.getAbsolutePath());
                                 FileInfo newFileInfo = fileInfos.get(i);
                                 newFileInfo.setFilePath(newFile.getAbsolutePath());

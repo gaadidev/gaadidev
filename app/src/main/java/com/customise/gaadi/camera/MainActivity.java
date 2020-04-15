@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.customise.gaadi.camera.util.CommonUtil;
 import com.gaadi.neon.PhotosLibrary;
 import com.gaadi.neon.enumerations.CameraFacing;
 import com.gaadi.neon.enumerations.CameraOrientation;
@@ -41,11 +43,17 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
     List<FileInfo> allreadyImages;
     private int numberOfTags = 2;
     private Location location;
+    private EditText editTextCompressRatio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeView();
+    }
+
+    private void initializeView() {
+        editTextCompressRatio = findViewById(R.id.editTextCompressRatio);
     }
 
     public void cameraPriorityClicked(View view) {
@@ -1180,5 +1188,140 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
             }
         });
+    }
+
+    public void compressImageClicked(View view) {
+        final String compressRatio = editTextCompressRatio.getText().toString();
+        if(CommonUtil.isStringContainsData(compressRatio))
+        {
+            if(Integer.parseInt(compressRatio)>=20 && Integer.parseInt(compressRatio)<=100)
+            {
+                try {
+                    PhotosLibrary.collectPhotos(1, MainActivity.this, LibraryMode.Relax, PhotosMode.setNeutralMode().setParams(new INeutralParam() {
+                        @Override
+                        public CameraFacing getCameraFacing() {
+                            return CameraFacing.back;
+                        }
+
+                        @Override
+                        public CameraOrientation getCameraOrientation() {
+                            return CameraOrientation.portrait;
+                        }
+
+                        @Override
+                        public boolean getFlashEnabled() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean getCameraSwitchingEnabled() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean getVideoCaptureEnabled() {
+                            return false;
+                        }
+
+                        @Override
+                        public CameraType getCameraViewType() {
+                            return CameraType.normal_camera;
+                        }
+
+                        @Override
+                        public boolean cameraToGallerySwitchEnabled() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean selectVideos() {
+                            return false;
+                        }
+
+                        @Override
+                        public GalleryType getGalleryViewType() {
+                            return GalleryType.Grid_Structure;
+                        }
+
+                        @Override
+                        public boolean enableFolderStructure() {
+                            return true;
+                        }
+
+                        @Override
+                        public boolean galleryToCameraSwitchEnabled() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isRestrictedExtensionJpgPngEnabled() {
+                            return true;
+                        }
+
+                        @Override
+                        public int getNumberOfPhotos() {
+                            return 0;
+                        }
+
+                        @Override
+                        public boolean hasOnlyProfileTag() {
+                            return true;
+                        }
+
+                        @Override
+                        public String getProfileTagName() {
+                            return "Profile Image";
+                        }
+
+                        @Override
+                        public boolean getTagEnabled() {
+                            return true;
+                        }
+
+                        @Override
+                        public List<ImageTagModel> getImageTagsModel() {
+                            ArrayList<ImageTagModel> list = new ArrayList<ImageTagModel>();
+                            for (int i = 0; i < numberOfTags; i++) {
+                                if (i % 2 == 0) {
+                                    list.add(new ImageTagModel("Tag" + i, String.valueOf(i), true, 1));
+                                } else {
+                                    list.add(new ImageTagModel("Tag" + i, String.valueOf(i), false, 1));
+                                }
+                            }
+                            return list;
+                        }
+
+                        @Override
+                        public List<FileInfo> getAlreadyAddedImages() {
+                            return allreadyImages;
+                        }
+
+                        @Override
+                        public boolean enableImageEditing() {
+                            return false;
+                        }
+
+                        @Override
+                        public CustomParameters getCustomParameters() {
+                            CustomParameters.CustomParametersBuilder builder = new CustomParameters.CustomParametersBuilder();
+                            builder.setLocationRestrictive(false);
+                            builder.setCompressBy(Integer.parseInt(compressRatio));
+                            builder.setFolderName("Compressed Image");
+                            return builder.build();
+                        }
+                    }), MainActivity.this);
+                } catch (NeonException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this,"Please Enter Compress Ratio in between 20 to 100.",Toast.LENGTH_LONG).show();
+            }
+        }
+        else
+        {
+            Toast.makeText(MainActivity.this,"Please Enter Compress Ratio",Toast.LENGTH_LONG).show();
+        }
     }
 }
