@@ -599,21 +599,31 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
                         }else{
                             mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
                         }
-
                         bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
                     }else{// LANDSCAPE MODE
                         //No need to reverse width and height
-                        bm = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
+                        int maxWidth = 1024; int maxHeight = 512;
+                        int width = bm.getWidth();
+                        int height = bm.getHeight();
+                        float ratioBitmap = (float) width / (float) height;
+                        float ratioMax = (float) maxWidth / (float) maxHeight;
+
+                        int finalWidth = maxWidth;
+                        int finalHeight = maxHeight;
+                        if (ratioMax > ratioBitmap) {
+                            finalWidth = (int) ((float)maxHeight * ratioBitmap);
+                        } else {
+                            finalHeight = (int) ((float)maxWidth / ratioBitmap);
+                        }
+                        bm = Bitmap.createScaledBitmap(bm, finalWidth, finalHeight, true);
                     }
                 } else {
                     return null;
                 }
                 // COnverting the Die photo to Bitmap
 
-
-
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                 byte[] byteArray = stream.toByteArray();
                 fos.write(byteArray);
                 //fos.write(data);

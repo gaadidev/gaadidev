@@ -891,7 +891,20 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
                         bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
                     } else {// LANDSCAPE MODE
                         //No need to reverse width and height
-                        bm = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
+                        int maxWidth = 1024; int maxHeight = 512;
+                        int width = bm.getWidth();
+                        int height = bm.getHeight();
+                        float ratioBitmap = (float) width / (float) height;
+                        float ratioMax = (float) maxWidth / (float) maxHeight;
+
+                        int finalWidth = maxWidth;
+                        int finalHeight = maxHeight;
+                        if (ratioMax > ratioBitmap) {
+                            finalWidth = (int) ((float)maxHeight * ratioBitmap);
+                        } else {
+                            finalHeight = (int) ((float)maxWidth / ratioBitmap);
+                        }
+                        bm = Bitmap.createScaledBitmap(bm, finalWidth, finalHeight, true);
                     }
                 } else {
                     return null;
