@@ -910,19 +910,21 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
                     return null;
                 }
                 // COnverting the Die photo to Bitmap
-
-
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                if(setCompressBy > 0) {
+                    bm.compress(Bitmap.CompressFormat.JPEG, setCompressBy, stream);
+                } else {
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                }
 
                 byte[] byteArray = stream.toByteArray();
                 fos.write(byteArray);
                 //fos.write(data);
                 fos.close();
 
-                if (setCompressBy != 0) {
+                /*if (setCompressBy != 0) {
                     NeonUtils.compressImage(setCompressBy, pictureFile.getAbsolutePath(), 1024, 900);
-                }
+                }*/
 
                 /*Uri pictureFileUri = Uri.parse("file://" + pictureFile.getAbsolutePath());
                 mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
