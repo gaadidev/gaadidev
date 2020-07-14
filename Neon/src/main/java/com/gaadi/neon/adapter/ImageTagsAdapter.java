@@ -39,25 +39,29 @@ public class ImageTagsAdapter extends ArrayAdapter<ImageTagModel> {
 
     @Override
     public int getCount() {
-
-        return NeonImagesHandler.getSingleonInstance().getGenericParam().getImageTagsModel().size();
+        int count = 0;
+        if(null != NeonImagesHandler.getSingletonInstance().getGenericParam()
+                && null != NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel()) {
+            count = NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().size();
+        }
+        return count;
     }
 
     @Override
     public ImageTagModel getItem(int position) {
 
-        return NeonImagesHandler.getSingleonInstance().getGenericParam().getImageTagsModel().get(position);
+        return NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().get(position);
     }
 
     @Override
     public long getItemId(int position) {
 
-        return NeonImagesHandler.getSingleonInstance().getGenericParam().getImageTagsModel().indexOf(getItem(position));
+        return NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().indexOf(getItem(position));
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageTagModel tagsModel = NeonImagesHandler.getSingleonInstance().getGenericParam().getImageTagsModel().get(position);
+        ImageTagModel tagsModel = NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().get(position);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.color_layout_row, parent, false);
 
@@ -71,7 +75,7 @@ public class ImageTagsAdapter extends ArrayAdapter<ImageTagModel> {
             mHolder = (ImageTagsModelsHolder) convertView.getTag();
 
         }
-        if(NeonImagesHandler.getSingleonInstance().checkImagesAvailableForTag(tagsModel)){
+        if(NeonImagesHandler.getSingletonInstance().checkImagesAvailableForTag(tagsModel)){
             convertView.setBackgroundColor( ContextCompat.getColor(context, android.R.color.darker_gray));
         }else{
             convertView.setBackgroundColor( ContextCompat.getColor(context, android.R.color.transparent));
@@ -123,7 +127,7 @@ public class ImageTagsAdapter extends ArrayAdapter<ImageTagModel> {
             mHolder = (ImageTagsModelsHolder) convertView.getTag();
 
         }
-        mHolder.text.setText(NeonImagesHandler.getSingleonInstance().getGenericParam().getImageTagsModel().get(position).getTagName());
+        mHolder.text.setText(NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().get(position).getTagName());
 
 
         return convertView;
