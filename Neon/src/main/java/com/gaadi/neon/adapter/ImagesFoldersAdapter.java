@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.gaadi.neon.activity.gallery.GridFilesActivity;
 import com.gaadi.neon.activity.gallery.HorizontalFilesActivity;
+import com.gaadi.neon.enumerations.GalleryType;
 import com.gaadi.neon.model.BucketModel;
 import com.gaadi.neon.util.Constants;
 import com.gaadi.neon.util.NeonImagesHandler;
@@ -93,7 +94,11 @@ public class ImagesFoldersAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent filesIntent;
-                switch (NeonImagesHandler.getSingleonInstance().getGalleryParam().getGalleryViewType()){
+                GalleryType type = GalleryType.Grid_Structure;
+                if(null != NeonImagesHandler.getSingletonInstance().getGalleryParam()){
+                    type = NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType();
+                }
+                switch (type){
                     case Grid_Structure:
                         filesIntent = new Intent(context, GridFilesActivity.class);
                         break;
