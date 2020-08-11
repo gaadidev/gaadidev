@@ -758,7 +758,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
         }
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = (null != activity && null != activity.getWindowManager()) ? activity.getWindowManager().getDefaultDisplay().getRotation() : Surface.ROTATION_0;
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:
