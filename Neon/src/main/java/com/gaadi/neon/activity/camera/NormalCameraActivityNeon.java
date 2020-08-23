@@ -2,6 +2,7 @@ package com.gaadi.neon.activity.camera;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -39,12 +40,13 @@ import com.gaadi.neon.util.Constants;
 import com.gaadi.neon.util.CustomParameters;
 import com.gaadi.neon.util.ExifInterfaceHandling;
 import com.gaadi.neon.util.FileInfo;
-import com.gaadi.neon.util.FindLocations;
+import com.gaadi.neon.util.LocationHelper;
 import com.gaadi.neon.util.ManifestPermission;
 import com.gaadi.neon.util.NeonException;
 import com.gaadi.neon.util.NeonImagesHandler;
 import com.gaadi.neon.util.NeonUtils;
 import com.gaadi.neon.util.PermissionType;
+import com.google.android.gms.location.LocationListener;
 import com.intsig.csopen.sdk.CSOpenAPI;
 import com.intsig.csopen.sdk.CSOpenApiFactory;
 import com.intsig.csopen.sdk.CSOpenApiHandler;
@@ -63,7 +65,7 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
  * @since 25/1/17
  */
 public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements CameraFragment1.SetOnPictureTaken
-        , LivePhotoNextTagListener, FindLocations.ILocation, View.OnClickListener {
+        , LivePhotoNextTagListener, View.OnClickListener, LocationListener {
 
     ICameraParam cameraParams;
     RelativeLayout tagsLayout, previewLayout;
@@ -72,6 +74,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     private TextView tvTag, tvNext, tvPrevious, buttonDone, previewTitle;
     private ImageView buttonGallery, showTagPreview, imagePreview, ivPreviewDone, ivPreviewCancel;
     private Location location;
+    private LocationHelper locationTracker;
     private LinearLayout imageHolderView;
     private final int REQ_CODE_CALL_CAMSCANNER = 168;
     private String mOutputImagePath;
@@ -113,6 +116,9 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
         customize();
         bindCameraFragment();
 
+        locationTracker = new LocationHelper(NormalCameraActivityNeon.this);
+        locationTracker.setLocationListener(this);
+
         if(cameraParams != null && cameraParams.getCustomParameters() != null && cameraParams.getCustomParameters().getCamScannerAPIKey() != null && !cameraParams.getCustomParameters().getCamScannerAPIKey().equals("")){
             camScannerApi = CSOpenApiFactory.createCSOpenApi(this, cameraParams.getCustomParameters().getCamScannerAPIKey(), null);
         }
@@ -121,8 +127,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
             NeonImagesHandler.getSingletonInstance().setLivePhotoNextTagListener(this);
         }
         if (cameraParams == null || cameraParams.getCustomParameters() == null || cameraParams.getCustomParameters().getLocationRestrictive()) {
-            FindLocations.getInstance().init(this);
-            FindLocations.getInstance().checkPermissions(this);
+            locationTracker.getLocation();
         }
         showTagImages();
     }
@@ -597,19 +602,21 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     }
 
     @Override
-    public void getLocation(Location location) {
-        this.location = location;
+    protected void onStop()
+    {
+        super.onStop();
+        locationTracker.stopLocationUpdates();
+        locationTracker.setLocationListener(null);
     }
 
     @Override
-    public void getAddress(String locationAddress) {
-
-    }
-
-    @Override
-    public void getPermissionStatus(Boolean locationPermission) {
-        boolean locationPermission1 = locationPermission;
-        FindLocations.getInstance().init(this);
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == LocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        {
+            locationTracker.getLocation();
+        }
     }
 
     @Override
@@ -699,5 +706,14 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
                 });
             }
         }
+        if(requestCode == LocationHelper.REQUEST_CHECK_SETTINGS && resultCode == RESULT_OK)
+        {
+            locationTracker.getLocation();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
     }
 }
