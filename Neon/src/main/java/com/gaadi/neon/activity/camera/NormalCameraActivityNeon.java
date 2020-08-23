@@ -623,7 +623,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     public boolean updateExifInfo(FileInfo fileInfo) {
         try {
             if (location == null)
-                return false;
+                return true;
             //if (cameraParams.getTagEnabled()) {
             //ImageTagModel imageTagModel = tagModels.get(currentTag);
             // Save exit attributes to file
@@ -643,7 +643,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return true;
 
     }
 
