@@ -232,7 +232,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
 
     public void onClick(View v) {
         if (v.getId() == R.id.buttonCaptureVertical || v.getId() == R.id.buttonCaptureHorizontal) {
-            if (locationRestrictive) {
+            /*if (locationRestrictive) {
                 if (FindLocations.getInstance().checkPermissions(mActivity) &&
                         FindLocations.getInstance().getLocation() != null) {
                     clickPicture();
@@ -243,7 +243,8 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
 
             } else {
                 clickPicture();
-            }
+            }*/
+            clickPicture();
 //            if (!locationRestrictive || (FindLocations.getInstance().checkPermissions(mActivity) &&
 //                    FindLocations.getInstance().getLocation() != null)) {
 //                clickPicture();
