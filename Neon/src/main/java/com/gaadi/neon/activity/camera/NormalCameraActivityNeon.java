@@ -415,7 +415,12 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     }
 
     public void setTag(ImageTagModel imageTagModel, boolean rightToLeft) {
-        tvTag.setText(imageTagModel.isMandatory() ? "*" + imageTagModel.getTagName() : imageTagModel.getTagName());
+        // need to update both view and internal data @ the same time, animation may delay this.
+        String tag = imageTagModel.isMandatory() ? "*" + imageTagModel.getTagName() : imageTagModel.getTagName();
+        tvTag.setText(tag);
+        if (NeonImagesHandler.getSingletonInstance().getLivePhotosListener() != null) {
+            NeonImagesHandler.getSingletonInstance().setCurrentTag(tag.trim());
+        }
         if (imageTagModel.isMandatory()) {
             tvTag.setTextColor(Color.RED);
         } else {
@@ -425,12 +430,6 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
             AnimationUtils.translateOnXAxis(tvTag, 200, 0);
         } else {
             AnimationUtils.translateOnXAxis(tvTag, -200, 0);
-        }
-
-        if (NeonImagesHandler.getSingletonInstance().getLivePhotosListener() != null) {
-            //tvNext.setVisibility(View.INVISIBLE);
-            //tvPrevious.setVisibility(View.INVISIBLE);
-            NeonImagesHandler.getSingletonInstance().setCurrentTag(tvTag.getText().toString().trim());
         }
     }
 
@@ -622,8 +621,6 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     @Override
     public boolean updateExifInfo(FileInfo fileInfo) {
         try {
-            if (location == null)
-                return true;
             //if (cameraParams.getTagEnabled()) {
             //ImageTagModel imageTagModel = tagModels.get(currentTag);
             // Save exit attributes to file
@@ -634,9 +631,12 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
             } else {
                 String appName = Constants.getAppName(this);
                 ExifInterfaceHandling exifInterfaceHandling = new ExifInterfaceHandling(file);
-                exifInterfaceHandling.setLocation(location, appName);
-                if ((String.valueOf(location.getLatitude())).equals(exifInterfaceHandling.getAttribute(ExifInterfaceHandling.TAG_GPS_LATITUDE_REF))) {
-                    return true;
+                if(location != null)
+                {
+                    exifInterfaceHandling.setLocation(location, appName);
+                    if ((String.valueOf(location.getLatitude())).equals(exifInterfaceHandling.getAttribute(ExifInterfaceHandling.TAG_GPS_LATITUDE_REF))) {
+                        return true;
+                    }
                 }
             }
             // }
