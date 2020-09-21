@@ -18,6 +18,10 @@ import com.gaadi.neon.util.Constants;
 import com.gaadi.neon.util.NeonImagesHandler;
 import com.scanlibrary.R;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import static com.gaadi.neon.enumerations.GalleryType.Folder_Alphabetical_Sorted;
 
 /**
  * Created by Lakshay on 27-02-2015.
@@ -28,9 +32,20 @@ public class ImagesFoldersAdapter extends BaseAdapter {
     private ArrayList<BucketModel> folders;
 
     public ImagesFoldersAdapter(Activity context, ArrayList<BucketModel> bucketModels) {
-
         this.context = context;
         this.folders = bucketModels;
+        if (NeonImagesHandler.getSingletonInstance().getGalleryParam() != null
+                && NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() != null&&
+                NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() == Folder_Alphabetical_Sorted ) {
+            //Alphabetical order sorting of gallery
+            Collections.sort(folders, new Comparator<BucketModel>() {
+                @Override
+                public int compare(BucketModel bucketModel1, BucketModel bucketModel2) {
+                    return bucketModel1.getBucketName().compareToIgnoreCase(bucketModel2.getBucketName());
+                }
+            });
+
+        }
     }
 
     @Override
@@ -86,6 +101,7 @@ public class ImagesFoldersAdapter extends BaseAdapter {
                 if (NeonImagesHandler.getSingletonInstance().getGalleryParam() != null
                         && NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() != null) {
                     switch (NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType()) {
+                        case Folder_Alphabetical_Sorted:
                         case Grid_Structure:
                             filesIntent = new Intent(context, GridFilesActivity.class);
                             break;

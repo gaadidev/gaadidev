@@ -37,6 +37,12 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:onClick="gridOnlyFolderAlphabeticalSortedClicked"
+            android:text="Grid Alphabetical Sorted Structure (Folders)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:onClick="gridPriorityFolderClicked"
             android:text="Grid priority Structure (Folders)"
             android:layout_width="wrap_content"

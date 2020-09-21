@@ -8,5 +8,6 @@ package com.gaadi.neon.enumerations;
 public enum GalleryType {
 
     Grid_Structure,
-    Horizontal_Structure
+    Horizontal_Structure,
+    Folder_Alphabetical_Sorted
 }
