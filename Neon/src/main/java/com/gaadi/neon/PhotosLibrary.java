@@ -108,7 +108,7 @@ public class PhotosLibrary {
         NeonImagesHandler.getSingletonInstance().setGalleryParam(galleryParams);
 
         switch (galleryParams.getGalleryViewType()) {
-
+            case Folder_Alphabetical_Sorted:
             case Grid_Structure:
                 Intent gridGalleryIntent;
                 if (galleryParams.enableFolderStructure()) {

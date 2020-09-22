@@ -145,11 +145,15 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
     }
 
     public void clickPicture() {
-        if (readyToTakePicture) {
-            if (mCamera != null) {
-                mCamera.takePicture(null, null, this);
+        try {
+            if (readyToTakePicture) {
+                if (mCamera != null) {
+                    mCamera.takePicture(null, null, this);
+                }
+                readyToTakePicture = false;
             }
-            readyToTakePicture = false;
+        }catch (Exception exception){
+            exception.printStackTrace();
         }
     }
 
@@ -293,8 +297,9 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
         ViewGroup.LayoutParams layoutParamsDrawing
                 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
-
-        getActivity().addContentView(drawingView, layoutParamsDrawing);
+        if(getActivity()!=null){
+            getActivity().addContentView(drawingView, layoutParamsDrawing);
+        }
     }
 
     private void setFlashLayoutAndMode() {
@@ -724,7 +729,8 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
     }
 
     public int setPhotoOrientation(Activity activity, int cameraId) {
-        if (NeonImagesHandler.getSingleonInstance().getCameraParam().getCameraOrientation() == CameraOrientation.portrait) {
+        if (NeonImagesHandler.getSingleonInstance().getCameraParam()!=null&&
+                NeonImagesHandler.getSingleonInstance().getCameraParam().getCameraOrientation() == CameraOrientation.portrait) {
             if (localCameraFacing == CameraFacing.front) {
                 return 180;
             } else {

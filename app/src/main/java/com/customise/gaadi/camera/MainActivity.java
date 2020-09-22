@@ -458,7 +458,78 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
                 @Override
                 public GalleryType getGalleryViewType() {
-                    return GalleryType.Grid_Structure;
+                    return GalleryType.Folder_Alphabetical_Sorted;
+                }
+
+                @Override
+                public boolean enableFolderStructure() {
+                    return true;
+                }
+
+                @Override
+                public boolean galleryToCameraSwitchEnabled() {
+                    return false;
+                }
+
+                @Override
+                public boolean isRestrictedExtensionJpgPngEnabled() {
+                    return true;
+                }
+
+                @Override
+                public int getNumberOfPhotos() {
+                    return 5;
+                }
+
+                @Override
+                public boolean getTagEnabled() {
+                    return true;
+                }
+
+                @Override
+                public List<ImageTagModel> getImageTagsModel() {
+                    ArrayList<ImageTagModel> list = new ArrayList<ImageTagModel>();
+                    for (int i = 0; i < numberOfTags; i++) {
+                        if (i % 2 == 0) {
+                            list.add(new ImageTagModel("Tag" + i, String.valueOf(i), true, 1));
+                        } else {
+                            list.add(new ImageTagModel("Tag" + i, String.valueOf(i), false, 1));
+                        }
+                    }
+                    return list;
+                }
+
+                @Override
+                public List<FileInfo> getAlreadyAddedImages() {
+                    return allreadyImages;
+                }
+
+                @Override
+                public boolean enableImageEditing() {
+                    return false;
+                }
+
+                @Override
+                public CustomParameters getCustomParameters() {
+                    return null;
+                }
+            }), this);
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void gridOnlyFolderAlphabeticalSortedClicked(View view) {
+        try {
+            PhotosLibrary.collectPhotos(1, this, NeonImagesHandler.getSingleonInstance().getLibraryMode(), PhotosMode.setGalleryMode().setParams(new IGalleryParam() {
+                @Override
+                public boolean selectVideos() {
+                    return false;
+                }
+
+                @Override
+                public GalleryType getGalleryViewType() {
+                    return GalleryType.Folder_Alphabetical_Sorted;
                 }
 
                 @Override

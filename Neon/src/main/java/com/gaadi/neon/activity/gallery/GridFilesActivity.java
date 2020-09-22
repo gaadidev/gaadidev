@@ -90,7 +90,7 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
                 Toast.makeText(this, R.string.no_image_selected, Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
             } else {
-                if (!NeonImagesHandler.getSingleonInstance().isNeutralEnabled()) {
+                if (!NeonImagesHandler.getSingleonInstance().isNeutralEnabled() && NeonImagesHandler.getSingletonInstance().getGalleryParam()!=null) {
                     if (NeonImagesHandler.getSingletonInstance().getGalleryParam().enableImageEditing()
                             || NeonImagesHandler.getSingletonInstance().getGalleryParam().getTagEnabled()) {
                         Intent intent = new Intent(this, ImageShow.class);
@@ -146,7 +146,7 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
         if (NeonImagesHandler.getSingleonInstance().isNeutralEnabled()) {
             super.onBackPressed();
         } else {
-            if (!NeonImagesHandler.getSingleonInstance().getGalleryParam().enableFolderStructure()) {
+            if (NeonImagesHandler.getSingleonInstance().getGalleryParam()!= null && !NeonImagesHandler.getSingleonInstance().getGalleryParam().enableFolderStructure()) {
                 NeonImagesHandler.getSingleonInstance().showBackOperationAlertIfNeeded(this);
             } else {
                 super.onBackPressed();
