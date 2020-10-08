@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
                 @Override
                 public GalleryType getGalleryViewType() {
-                    return GalleryType.Grid_Structure;
+                    return GalleryType.Folder_Alphabetical_Sorted;
                 }
 
                 @Override
@@ -458,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
                 @Override
                 public GalleryType getGalleryViewType() {
-                    return GalleryType.Folder_Alphabetical_Sorted;
+                    return GalleryType.Grid_Structure;
                 }
 
                 @Override
