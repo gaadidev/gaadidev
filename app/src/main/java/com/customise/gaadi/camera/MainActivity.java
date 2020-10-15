@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
         setContentView(R.layout.activity_main);
     }
 
+
     public void cameraPriorityClicked(View view) {
         try {
 
