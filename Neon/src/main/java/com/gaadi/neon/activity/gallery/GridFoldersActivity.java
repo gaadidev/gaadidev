@@ -37,8 +37,13 @@ public class GridFoldersActivity extends NeonBaseGalleryActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindXml();
         setTitle(R.string.gallery);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindXml();
     }
 
     @Override
