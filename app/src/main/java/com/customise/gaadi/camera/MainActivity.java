@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
         setContentView(R.layout.activity_main);
     }
 
+
     public void cameraPriorityClicked(View view) {
         try {
 
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
                 @Override
                 public GalleryType getGalleryViewType() {
-                    return GalleryType.Grid_Structure;
+                    return GalleryType.Folder_Alphabetical_Sorted;
                 }
 
                 @Override
@@ -458,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements OnImageCollection
 
                 @Override
                 public GalleryType getGalleryViewType() {
-                    return GalleryType.Folder_Alphabetical_Sorted;
+                    return GalleryType.Grid_Structure;
                 }
 
                 @Override

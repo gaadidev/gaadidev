@@ -41,6 +41,12 @@ public class ImagesFoldersAdapter extends BaseAdapter {
             Collections.sort(folders, new Comparator<BucketModel>() {
                 @Override
                 public int compare(BucketModel bucketModel1, BucketModel bucketModel2) {
+                    if(bucketModel1 == null || bucketModel1.getBucketName() ==null){
+                        return (bucketModel2==null || bucketModel2.getBucketName()==null)? 0 : -1;
+                    }
+                    if(bucketModel2==null || bucketModel2.getBucketName()==null){
+                        return 1;
+                    }
                     return bucketModel1.getBucketName().compareToIgnoreCase(bucketModel2.getBucketName());
                 }
             });
