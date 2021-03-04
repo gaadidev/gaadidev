@@ -429,22 +429,24 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
     }
 
     private void initialiazeCurrentTag() {
-        for (int i = 0; i < NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().size(); i++) {
-            if (i < tagModels.size()) {
-                if (tagModels.get(i).isMandatory() &&
-                        !NeonImagesHandler.getSingletonInstance().checkImagesAvailableForTag(tagModels.get(i))) {
-                    currentTag = i;
-                    break;
+        if(NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel()!=null) {
+            for (int i = 0; i < NeonImagesHandler.getSingletonInstance().getGenericParam().getImageTagsModel().size(); i++) {
+                if (i < tagModels.size()) {
+                    if (tagModels.get(i).isMandatory() &&
+                            !NeonImagesHandler.getSingletonInstance().checkImagesAvailableForTag(tagModels.get(i))) {
+                        currentTag = i;
+                        break;
+                    }
                 }
             }
-        }
-        if (currentTag == tagModels.size() - 1) {
-            tvNext.setVisibility(View.VISIBLE);
-            tvNext.setText(getString(R.string.finish));
+            if (currentTag == tagModels.size() - 1) {
+                tvNext.setVisibility(View.VISIBLE);
+                tvNext.setText(getString(R.string.finish));
 
-        }
-        if (currentTag > 0) {
-            tvPrevious.setVisibility(View.VISIBLE);
+            }
+            if (currentTag > 0) {
+                tvPrevious.setVisibility(View.VISIBLE);
+            }
         }
         /*if (NeonImagesHandler.getSingletonInstance().getLivePhotosListener() != null) {
             tvNext.setVisibility(View.INVISIBLE);
@@ -488,7 +490,8 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
 
             if (NeonImagesHandler.getSingletonInstance().getLivePhotosListener() == null) {
 
-                if (NeonImagesHandler.getSingletonInstance().getCameraParam().getCameraViewType() == CameraType.gallery_preview_camera) {
+                if (NeonImagesHandler.getSingletonInstance().getCameraParam()!= null &&
+                        NeonImagesHandler.getSingletonInstance().getCameraParam().getCameraViewType() == CameraType.gallery_preview_camera) {
                     ImageView image = new ImageView(this);
                     Bitmap thumbnail = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(filePath), 200, 200);
                     image.setImageBitmap(thumbnail);

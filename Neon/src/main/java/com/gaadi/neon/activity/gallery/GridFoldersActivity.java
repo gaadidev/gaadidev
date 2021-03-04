@@ -80,8 +80,8 @@ public class GridFoldersActivity extends NeonBaseGalleryActivity {
                 Toast.makeText(this, R.string.no_image_selected, Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
             } else {
-                if(NeonImagesHandler.getSingletonInstance().getGalleryParam().enableImageEditing()
-                        || NeonImagesHandler.getSingletonInstance().getGalleryParam().getTagEnabled()) {
+                if(NeonImagesHandler.getSingletonInstance().getGalleryParam()!=null && (NeonImagesHandler.getSingletonInstance().getGalleryParam().enableImageEditing()
+                        || NeonImagesHandler.getSingletonInstance().getGalleryParam().getTagEnabled())) {
                     Intent intent = new Intent(this, ImageShow.class);
                     startActivity(intent);
                     finish();

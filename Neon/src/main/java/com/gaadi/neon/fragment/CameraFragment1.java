@@ -297,7 +297,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
         ViewGroup.LayoutParams layoutParamsDrawing
                 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.FILL_PARENT);
-        if(getActivity()!=null){
+        if(getActivity()!=null && drawingView!=null){
             getActivity().addContentView(drawingView, layoutParamsDrawing);
         }
     }

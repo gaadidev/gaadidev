@@ -221,11 +221,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         //mCamera.setParameters(p);
         try {
             mCamera.setPreviewDisplay(holder);
+            mCamera.startPreview();
+            mCamera.autoFocus(null);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mCamera.startPreview();
-        mCamera.autoFocus(null);
+
         // set preview size and make any resize, rotate or
         // reformatting changes here
 
