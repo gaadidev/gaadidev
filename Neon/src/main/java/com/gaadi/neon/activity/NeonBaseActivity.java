@@ -5,17 +5,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gaadi.neon.interfaces.OnPermissionResultListener;
 import com.gaadi.neon.util.ManifestPermission;
@@ -27,7 +28,7 @@ import com.scanlibrary.R;
  * @version 1.0
  * @since 25/1/17
  */
-public abstract class NeonBaseActivity extends AppCompatActivity{
+public abstract class NeonBaseActivity extends AppCompatActivity {
 
     protected FrameLayout frameLayout;
     protected Toolbar toolbar;

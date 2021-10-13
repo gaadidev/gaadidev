@@ -1,9 +1,10 @@
 package com.gaadi.neon.activity;
 
-import android.databinding.DataBindingUtil;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
 
 import com.gaadi.neon.PhotosLibrary;
 import com.gaadi.neon.fragment.ImageShowFragment;
