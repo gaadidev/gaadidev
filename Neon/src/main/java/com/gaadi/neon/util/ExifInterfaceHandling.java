@@ -1,8 +1,9 @@
 package com.gaadi.neon.util;
 
 import android.location.Location;
-import android.support.media.ExifInterface;
 
+
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.File;
 import java.io.IOException;
