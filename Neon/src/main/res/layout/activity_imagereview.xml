@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/image_review_toolbar">
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

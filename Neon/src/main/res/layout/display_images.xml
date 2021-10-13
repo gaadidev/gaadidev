@@ -19,7 +19,7 @@
         android:adjustViewBounds="true"
         android:src="@color/tranparent_black" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:contentDescription="@null"
         android:id="@+id/ivRemoveImage"
         android:layout_width="30dp"
