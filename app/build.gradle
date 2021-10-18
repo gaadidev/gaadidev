@@ -9,12 +9,12 @@ android {
 //            storePassword '123456'
 //        }
 //    }
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion Integer.parseInt(project.COMPILE_SDK_VERSION)
+    // buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.customise.gaadi.camera"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion Integer.parseInt(project.MIN_SDK_VERSION)
+        targetSdkVersion Integer.parseInt(project.TARGET_SDK_VERSION)
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -41,13 +41,14 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 //    testCompile 'junit:junit:4.12'
     implementation project(':Neon')
+    implementation 'com.google.android.gms:play-services-location:15.0.0'
     //compile 'com.android.support:multidex:1.0.3'
     // compile 'com.android.support:design:28.0.0'
     // compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.google.android.gms:play-services-location:15.0.0'
-    implementation "androidx.exifinterface:exifinterface:1.3.3"
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+
+    implementation "androidx.exifinterface:exifinterface:$exifinterfaceVersion"
+    implementation "androidx.appcompat:appcompat:$appCompactVersion"
+    implementation "com.google.android.material:material:$materialSupportVersion"
+    implementation "androidx.multidex:multidex:$multidexVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
 }
