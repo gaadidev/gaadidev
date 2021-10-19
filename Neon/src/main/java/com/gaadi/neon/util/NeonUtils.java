@@ -428,7 +428,7 @@ public class NeonUtils {
     public static File getEmptyStoragePath(Context ctx) {
         File mediaFile = null;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS").format(new Date());
-        String selectedPath = null;
+        String selectedPath = "";
         ArrayList<String> list = (ArrayList) getSdCardPaths(ctx, true);
         for (String path : list) {
 
@@ -438,7 +438,7 @@ public class NeonUtils {
                 break;
             }
         }
-        File externalDir = new File(selectedPath , ctx.getString(R.string.app_name));
+       /* File externalDir = new File(selectedPath , ctx.getString(R.string.app_name));
         if (!externalDir.exists()) {
             if (!externalDir.mkdir()) {
                 //Toast.makeText(ctx,"FAILED externalDir.mkdir() TO CREATE DIRECTORY",Toast.LENGTH_SHORT).show();
@@ -452,25 +452,32 @@ public class NeonUtils {
 
         mediaFile = new File(externalDir.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
-        return mediaFile;
+        return mediaFile;*/
+        return new File(selectedPath);
     }
 
     public static List<String> getSdCardPaths(final Context context, final boolean includePrimaryExternalStorage) {
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).toString());
+//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES).toString());
+
+        Uri pictureFile = Constants.getMediaOutputFile(context,Constants.TYPE_IMAGE);
+        if(pictureFile == null)
+            return null;
+        String path = FileUtils.getPath(context, pictureFile);
+
         final List<String> result = new ArrayList<>();
-        if(!mediaStorageDir.exists()){
+        /*if(!mediaStorageDir.exists()){
             if(!mediaStorageDir.mkdir()){
                 Log.e("CommonUtils","Pictures Directory not found");
             }
             else{
                 result.add(mediaStorageDir.getAbsolutePath());
             }
-        }
-        else{
+        } else{
             result.add(mediaStorageDir.getAbsolutePath());
-        }
+        }*/
+        result.add(path);
         final File[] externalCacheDirs = ContextCompat.getExternalFilesDirs(context,null);
         if (externalCacheDirs == null || externalCacheDirs.length == 0)
             return null;

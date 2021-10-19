@@ -1,6 +1,7 @@
 package com.gaadi.neon.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -79,7 +80,7 @@ public class CameraActivity extends AppCompatActivity implements CameraFragment.
     }
 
     @Override
-    public void sendPictureForCropping(File file)
+    public void sendPictureForCropping(Uri file)
     {
 //        Intent intent = new Intent(this, ScanActivity.class);
 //        intent.putExtra(ScanConstants.IMAGE_FILE_FOR_CROPPING,file);

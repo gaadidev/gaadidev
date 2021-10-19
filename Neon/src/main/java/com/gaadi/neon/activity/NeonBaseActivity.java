@@ -1,18 +1,24 @@
 package com.gaadi.neon.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -34,6 +40,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     private OnPermissionResultListener permissionResultListener;
     private final int permissionRequestCode=1;
+    private final int permissionCodeForAPI30=2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,7 +162,24 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 }
                 break;
             case write_external_storage:
-                goForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        permissionResultListener.onResult(true);
+                    } else {
+                        try {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                            intent.addCategory("android.intent.category.DEFAULT");
+                            intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+                            startActivityForResult(intent, permissionCodeForAPI30);
+                        } catch (Exception e) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                            startActivityForResult(intent, permissionCodeForAPI30);
+                        }
+                    }
+                } else {
+                    goForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                }
                 break;
 
             default:
@@ -164,7 +188,6 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
         }
 
     }
-
 
     private void goForPermission(String[] permissionName) throws ManifestPermission{
 
@@ -187,6 +210,18 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
             case permissionRequestCode: {
                 permissionResultListener.onResult(grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (permissionCodeForAPI30 == resultCode) {
+            if (Environment.isExternalStorageManager()) {
+                permissionResultListener.onResult(true);
+            } else {
+                Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
             }
         }
     }
