@@ -2,7 +2,9 @@ package com.customise.gaadi.camera;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.MultiDex;
+
 /**
  * @author lakshaygirdhar
  * @version 1.0

@@ -18,10 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,6 +30,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -55,8 +56,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Lakshay
@@ -100,7 +103,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
     public interface PictureTakenListener {
          void onPictureTaken(String filePath);
          void onPicturesFinalized(ArrayList<FileInfo> infos);
-         void sendPictureForCropping(File file);
+         void sendPictureForCropping(Uri file);
     }
 
     public static CameraFragment getInstance(PhotoParams photoParams) {
@@ -546,7 +549,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
         new ImagePostProcessing(mActivity, data).execute();
     }
 
-    private class ImagePostProcessing extends AsyncTask<Void, Void, File> {
+    private class ImagePostProcessing extends AsyncTask<Void, Void, Uri> {
 
         private Context context;
         private byte[] data;
@@ -558,14 +561,21 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
         }
 
         @Override
-        protected File doInBackground(Void... params) {
-            File pictureFile = Constants.getMediaOutputFile(getActivity(),Constants.TYPE_IMAGE);
+        protected Uri doInBackground(Void... params) {
+            //File pictureFile = Constants.getMediaOutputFile(getActivity(),Constants.TYPE_IMAGE);
+            Uri pictureFile = Constants.getMediaOutputFile(getActivity(),Constants.TYPE_IMAGE);
 
             if(pictureFile == null)
                 return null;
 
             try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
+                OutputStream fos;
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    fos = new FileOutputStream(new File(pictureFile.getPath()));
+                } else {
+                    fos = getActivity().getContentResolver().openOutputStream(Objects.requireNonNull(pictureFile));
+                    Objects.requireNonNull(fos);
+                }
                 Bitmap bm;
 
                 // COnverting ByteArray to Bitmap - >Rotate and Convert back to Data
@@ -615,7 +625,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
                 fos.write(byteArray);
                 //fos.write(data);
                 fos.close();
-                Uri pictureFileUri = Uri.parse("file://" + pictureFile.getAbsolutePath());
+                Uri pictureFileUri = Uri.parse("file://" + pictureFile.getPath());
                 mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                         pictureFileUri));
 
@@ -636,7 +646,7 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
         }
 
         @Override
-        protected void onPostExecute(File file) {
+        protected void onPostExecute(Uri file) {
             super.onPostExecute(file);
             if (progressDialog != null)
                 progressDialog.dismiss();
@@ -663,10 +673,10 @@ public class CameraFragment extends Fragment implements View.OnClickListener, Vi
     }
 
     //updates the listview with the photos clicked by the camera
-    private void updateCapturedPhotos(File pictureFile) {
+    private void updateCapturedPhotos(Uri pictureFile) {
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setFilePath(pictureFile.getAbsolutePath());
-        fileInfo.setFileName(pictureFile.getAbsolutePath().substring(pictureFile.getAbsolutePath().lastIndexOf("/") + 1));
+        fileInfo.setFilePath(pictureFile.getPath());
+        fileInfo.setFileName(pictureFile.getPath().substring(pictureFile.getPath().lastIndexOf("/") + 1));
         fileInfo.setSource(FileInfo.SOURCE.PHONE_CAMERA);
         imagesList.add(fileInfo);
         if (maxNumberOfImages == 1) {
