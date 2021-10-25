@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -25,13 +24,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,6 +37,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gaadi.neon.activity.ImageReviewActivity;
 import com.gaadi.neon.adapter.FlashModeRecyclerHorizontalAdapter;
@@ -69,6 +71,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("deprecation,unchecked")
 public class CameraFragment1 extends Fragment implements View.OnTouchListener, Camera.PictureCallback {
@@ -345,7 +348,8 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_REVIEW) {
                 String capturedFilePath = "";
-                mPictureTakenListener.onPictureTaken(capturedFilePath);
+                //mPictureTakenListener.onPictureTaken(capturedFilePath);
+                mPictureTakenListener.onPictureTaken(null);
             }
         } else {
             if (requestCode != 101) {
@@ -796,7 +800,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
     }
 
     public interface PictureTakenListener {
-        void onPictureTaken(String filePath);
+        void onPictureTaken(Uri uriFilePath);
 
         void onPicturesFinalized(ArrayList<FileInfo> infos);
 
@@ -804,10 +808,10 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
     }
 
     public interface SetOnPictureTaken {
-        void onPictureTaken(String filePath);
+        void onPictureTaken(Uri filePath);
     }
 
-    private class ImagePostProcessing extends AsyncTask<Void, Void, File> {
+    private class ImagePostProcessing extends AsyncTask<Void, Void, Uri> {
 
         private Context context;
         private byte[] data;
@@ -822,14 +826,20 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
 
 
 
-        public File savePictureToStorage(){
-            File pictureFile = Constants.getMediaOutputFile(getActivity(), Constants.TYPE_IMAGE);
-            Log.d("HIMANSHU FILE=",pictureFile.getAbsolutePath());
+        public Uri savePictureToStorage(){
+            Uri pictureFile = Constants.getMediaOutputFile(getActivity(), Constants.TYPE_IMAGE);
+            Log.d("HIMANSHU FILE=",pictureFile.getPath());
             if (pictureFile == null)
                 return null;
 
             try {
-                OutputStream fos = new FileOutputStream(pictureFile);
+                OutputStream fos;
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    fos = new FileOutputStream(new File(pictureFile.getPath()));
+                } else {
+                    fos = getActivity().getContentResolver().openOutputStream(Objects.requireNonNull(pictureFile));
+                    Objects.requireNonNull(fos);
+                }
                 Bitmap bm;
 
                 // COnverting ByteArray to Bitmap - >Rotate and Convert back to Data
@@ -883,7 +893,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
                 fos.write(byteArray);
                 //fos.write(data);
                 fos.close();
-                Uri pictureFileUri = Uri.parse("file://" + pictureFile.getAbsolutePath());
+                Uri pictureFileUri = Uri.parse("file://" + pictureFile.getPath());
                 mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                         pictureFileUri));
 
@@ -897,18 +907,18 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(pictureFile.exists()){
+            /*if(pictureFile.exists()){
                 return pictureFile;
             }else{
                 pictureFile=null;
                 savePictureToStorage();
-            }
+            }*/
             return pictureFile;
         }
 
         @Override
-        protected File doInBackground(Void... params) {
-            File pictureFile= savePictureToStorage();
+        protected Uri doInBackground(Void... params) {
+            Uri pictureFile= savePictureToStorage();
             return pictureFile;
         }
 
@@ -919,7 +929,7 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
         }
 
         @Override
-        protected void onPostExecute(File file) {
+        protected void onPostExecute(Uri file) {
             super.onPostExecute(file);
             if (progressDialog != null)
                 progressDialog.dismiss();
@@ -944,7 +954,8 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
                     },200);
                 }
 
-                mPictureTakenListener.onPictureTaken(file.getAbsolutePath());
+                //mPictureTakenListener.onPictureTaken(file.getPath());
+                mPictureTakenListener.onPictureTaken(file);
 
                 // readyToTakePicture = true;
             } else {

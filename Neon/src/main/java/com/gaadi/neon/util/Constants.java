@@ -1,6 +1,8 @@
 package com.gaadi.neon.util;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -40,31 +42,34 @@ public class Constants {
     public static final String SINGLE_TAG_SELECTION = "singleTagSelection";
     public static final String ALREADY_SELECTED_TAGS = "alreadySelectedTags";
     public static String FLAG = "Flag";
+    public static String PIC_MIME_TYPE = "image/jpeg";
 
-    public static File getMediaOutputFile(Context context, int type) {
+    public static Uri getMediaOutputFile(Context context, int type) {
         String appName = context.getString(R.string.app_name);
         if (appName.length() > 0) {
             appName = appName.replace(" ", "");
         }
 
-        String path=Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+appName;
-        File mediaStorageDir = new File(path);
+        String fileName;
+        Uri mediaFile;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            fileName = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + appName;
+            // Create the storage directory if it does not exist
 
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory");
+            File mediaStorageDir = new File(fileName);
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.d("MyCameraApp", "failed to create directory");
+                }
             }
-        }
-        // Create a media file name
-        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS").format(new Date());
-        File mediaFile;
+            //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS").format(new Date());
+            mediaFile = Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + System.currentTimeMillis() + ".jpg"));
 
-        if (type == TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + System.currentTimeMillis() + ".jpg");
-        } else
-            return null;
+        } else {
+            fileName = Environment.DIRECTORY_PICTURES + File.separator + appName;
+            mediaFile =  FileUtils.createDocFileName(context, fileName,  "IMG_" + System.currentTimeMillis() + ".jpg");
+        }
         return mediaFile;
     }
 }
