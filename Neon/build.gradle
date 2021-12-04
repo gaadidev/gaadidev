@@ -62,10 +62,10 @@ ext {
 
     libraryDescription = 'A library for selection of images from android device camera or gallery'
 
-    siteUrl = 'https://github.com/lakshaygirdhar/neon'
-    gitUrl = 'https://github.com/lakshaygirdhar/neon'
+    siteUrl = 'https://github.com/gaadidev/Neon-android-native'
+    gitUrl = 'https://github.com/gaadidev/Neon-android-native'
 
-    libraryVersion = '4.1.9'
+    libraryVersion = '4.2.0'
 
     developerId = 'lakshay'
     developerName = 'Lakshay Girdhar'
