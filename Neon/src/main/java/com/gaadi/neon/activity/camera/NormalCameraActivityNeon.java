@@ -45,6 +45,7 @@ import com.gaadi.neon.util.ManifestPermission;
 import com.gaadi.neon.util.NeonException;
 import com.gaadi.neon.util.NeonImagesHandler;
 import com.gaadi.neon.util.PermissionType;
+import com.scanlibrary.BuildConfig;
 import com.scanlibrary.R;
 import com.scanlibrary.databinding.NormalCameraActivityLayoutBinding;
 
@@ -109,7 +110,9 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
 
     private void bindCameraFragment() {
         try {
-            askForPermissionIfNeeded(PermissionType.read_external_storage, new OnPermissionResultListener() {
+            PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
+
+            askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {

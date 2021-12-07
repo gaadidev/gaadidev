@@ -2,6 +2,7 @@ package com.gaadi.neon.activity.gallery;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -236,13 +237,11 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
     }
 
     private void bindXml() {
-//        ActivityGridFilesBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_files, frameLayout, true);
-//        GridFilesAdapter adapter = new GridFilesAdapter(GridFilesActivity.this, getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId)));
-//        binder.gvFolderPhotos.setAdapter(adapter);
 
+        PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
 
         try {
-            askForPermissionIfNeeded(PermissionType.read_external_storage, new OnPermissionResultListener() {
+            askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {
