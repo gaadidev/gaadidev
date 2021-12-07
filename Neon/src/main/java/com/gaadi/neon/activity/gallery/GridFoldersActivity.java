@@ -191,8 +191,12 @@ public class GridFoldersActivity extends NeonBaseGalleryActivity {
 
 
     private void bindXml() {
+
+//        ActivityGridFoldersBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_folders, frameLayout, true);
+//        ImagesFoldersAdapter adapter = new ImagesFoldersAdapter(GridFoldersActivity.this, getImageBuckets());
+//        binder.gvFolders.setAdapter(adapter);
         try {
-            askForPermissionIfNeeded(PermissionType.write_external_storage, new OnPermissionResultListener() {
+            askForPermissionIfNeeded(PermissionType.read_external_storage, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {

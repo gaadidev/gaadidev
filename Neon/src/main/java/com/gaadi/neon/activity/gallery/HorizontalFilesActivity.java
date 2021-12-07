@@ -245,7 +245,7 @@ public class HorizontalFilesActivity extends NeonBaseGalleryActivity implements 
 
     private void bindXml() {
         try {
-            askForPermissionIfNeeded(PermissionType.write_external_storage, new OnPermissionResultListener() {
+            askForPermissionIfNeeded(PermissionType.read_external_storage, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {
@@ -273,7 +273,15 @@ public class HorizontalFilesActivity extends NeonBaseGalleryActivity implements 
             manifestPermission.printStackTrace();
         }
 
-
+//        binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.horizontal_gallery_layout, frameLayout, true);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HorizontalFilesActivity.this, LinearLayoutManager.HORIZONTAL, false);
+//        binder.galleryHorizontalRv.setLayoutManager(linearLayoutManager);
+//        fileInfos = getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId));
+//        if (fileInfos != null && fileInfos.size() > 0) {
+//            GalleryHoriontalAdapter adapter = new GalleryHoriontalAdapter(HorizontalFilesActivity.this, fileInfos, HorizontalFilesActivity.this);
+//            binder.galleryHorizontalRv.setAdapter(adapter);
+//            onClick(fileInfos.get(0));
+//        }
     }
 
 
