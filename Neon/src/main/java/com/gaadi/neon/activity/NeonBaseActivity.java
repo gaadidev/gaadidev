@@ -162,24 +162,24 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 }
                 break;
             case write_external_storage:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        permissionResultListener.onResult(true);
-                    } else {
-                        try {
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                            intent.addCategory("android.intent.category.DEFAULT");
-                            intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
-                            startActivityForResult(intent, permissionCodeForAPI30);
-                        } catch (Exception e) {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                            startActivityForResult(intent, permissionCodeForAPI30);
-                        }
-                    }
-                } else {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    if (Environment.isExternalStorageManager()) {
+//                        permissionResultListener.onResult(true);
+//                    } else {
+//                        try {
+//                            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                            intent.addCategory("android.intent.category.DEFAULT");
+//                            intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+//                            startActivityForResult(intent, permissionCodeForAPI30);
+//                        } catch (Exception e) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                            startActivityForResult(intent, permissionCodeForAPI30);
+//                        }
+//                    }
+//                } else {
                     goForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
-                }
+//                }
                 break;
 
             default:
@@ -213,7 +213,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
             }
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.R)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,6 +1,7 @@
 package com.gaadi.neon.activity.gallery;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -191,8 +192,10 @@ public class GridFoldersActivity extends NeonBaseGalleryActivity {
 
 
     private void bindXml() {
+        PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
+
         try {
-            askForPermissionIfNeeded(PermissionType.write_external_storage, new OnPermissionResultListener() {
+            askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {

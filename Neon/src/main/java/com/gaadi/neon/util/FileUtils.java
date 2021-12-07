@@ -27,7 +27,7 @@ public class FileUtils {
 
     public static Uri createDocFileName(Context context, String path, String displayName){
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return createDocFileAboveQ(context, path,  displayName, Constants.PIC_MIME_TYPE);
         } else {
             File file = createDocFileLegacy(path, displayName);
@@ -55,7 +55,7 @@ public class FileUtils {
         return resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
     }
     public static String getPath (Context context, Uri uri) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             try {
                 context.grantUriPermission(context.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 String[] projection = {MediaStore.MediaColumns.DATA};

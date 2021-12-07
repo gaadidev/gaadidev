@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -44,6 +45,7 @@ import com.gaadi.neon.util.ManifestPermission;
 import com.gaadi.neon.util.NeonException;
 import com.gaadi.neon.util.NeonImagesHandler;
 import com.gaadi.neon.util.PermissionType;
+import com.scanlibrary.BuildConfig;
 import com.scanlibrary.R;
 import com.scanlibrary.databinding.NormalCameraActivityLayoutBinding;
 
@@ -108,7 +110,9 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
 
     private void bindCameraFragment() {
         try {
-            askForPermissionIfNeeded(PermissionType.write_external_storage, new OnPermissionResultListener() {
+            PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
+
+            askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
                 @Override
                 public void onResult(boolean permissionGranted) {
                     if (permissionGranted) {
@@ -224,7 +228,8 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
             }
 
 
-        } else if (id == R.id.buttonGallery) {
+        }
+        else if (id == R.id.buttonGallery) {
             try {
                 IGalleryParam galleryParam = NeonImagesHandler.getSingletonInstance().getGalleryParam();
                 if (galleryParam == null) {
@@ -290,6 +295,7 @@ public class NormalCameraActivityNeon extends NeonBaseCameraActivity implements 
                 finish();
             } catch (NeonException e) {
                 e.printStackTrace();
+                Log.d("neonException",e.toString());
             }
         } else if (id == R.id.tvSkip) {
             if (currentTag == tagModels.size() - 1) {
