@@ -213,7 +213,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
             }
         }
     }
-    @RequiresApi(api = Build.VERSION_CODES.R)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
