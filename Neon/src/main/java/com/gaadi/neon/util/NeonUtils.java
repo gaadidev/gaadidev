@@ -313,7 +313,7 @@ public class NeonUtils {
             new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.permission_error))
                     .setMessage(context.getString(R.string.you_need_to_allow_access_to,
-                            new String[]{requestFor, requestFor}))
+                            requestFor, requestFor))
                     .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
