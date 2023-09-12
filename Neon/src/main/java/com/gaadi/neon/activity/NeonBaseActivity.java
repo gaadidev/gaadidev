@@ -4,11 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -40,12 +38,12 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     private OnPermissionResultListener permissionResultListener;
     private final int permissionRequestCode=1;
-    private final int permissionCodeForAPI30=2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.NeonLibTheme);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_base);
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -118,14 +116,10 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 goForPermission(new String[]{Manifest.permission.CALL_PHONE});
                 break;
             case read_call_log:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    goForPermission(new String[]{Manifest.permission.READ_CALL_LOG});
-                }
+                goForPermission(new String[]{Manifest.permission.READ_CALL_LOG});
                 break;
             case write_call_log:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    goForPermission(new String[]{Manifest.permission.WRITE_CALL_LOG});
-                }
+                goForPermission(new String[]{Manifest.permission.WRITE_CALL_LOG});
                 break;
             case add_voice_mail:
                 goForPermission(new String[]{Manifest.permission.ADD_VOICEMAIL});
@@ -137,9 +131,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 goForPermission(new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS});
                 break;
             case body_sensors:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                    goForPermission(new String[]{Manifest.permission.BODY_SENSORS});
-                }
+                goForPermission(new String[]{Manifest.permission.BODY_SENSORS});
                 break;
             case send_sms:
                 goForPermission(new String[]{Manifest.permission.SEND_SMS});
@@ -157,7 +149,9 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 goForPermission(new String[]{Manifest.permission.RECEIVE_MMS});
                 break;
             case read_external_storage:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    goForPermission(new String[]{Manifest.permission.READ_MEDIA_IMAGES});
+                } else {
                     goForPermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
                 }
                 break;
@@ -206,22 +200,24 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case permissionRequestCode: {
-                permissionResultListener.onResult(grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED);
-            }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == permissionRequestCode) {
+            permissionResultListener.onResult(grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED);
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int permissionCodeForAPI30 = 2;
         if (permissionCodeForAPI30 == resultCode) {
-            if (Environment.isExternalStorageManager()) {
-                permissionResultListener.onResult(true);
-            } else {
-                Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    permissionResultListener.onResult(true);
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

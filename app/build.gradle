@@ -23,8 +23,8 @@ android {
         dataBinding = true // for data binding
     }
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildTypes {
         release {
@@ -44,8 +44,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 //    testCompile 'junit:junit:4.12'
     implementation project(':Neon')
-    implementation 'com.google.android.gms:play-services-location:15.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
     //compile 'com.android.support:multidex:1.0.3'
     // compile 'com.android.support:design:28.0.0'
     // compile 'com.android.support.constraint:constraint-layout:1.0.2'

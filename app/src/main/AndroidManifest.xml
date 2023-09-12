@@ -15,8 +15,9 @@
         android:supportsRtl="false"
         android:theme="@style/NeonAppTheme"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:theme,android:icon">
-        <activity android:name=".MainActivity">
+        tools:replace="android:theme">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
