@@ -76,6 +76,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     protected void askForPermissionIfNeeded(PermissionType permissionType,
                                             OnPermissionResultListener listener) throws ManifestPermission {
 
@@ -149,7 +150,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 goForPermission(new String[]{Manifest.permission.RECEIVE_MMS});
                 break;
             case read_external_storage:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     goForPermission(new String[]{Manifest.permission.READ_MEDIA_IMAGES});
                 } else {
                     goForPermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
