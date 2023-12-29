@@ -3,6 +3,7 @@ package com.gaadi.neon.activity.gallery;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.gaadi.neon.activity.NeonBaseActivity;
@@ -33,7 +34,7 @@ public abstract class NeonBaseGalleryActivity extends NeonBaseActivity {
 
         Cursor mCursor;
         if (NeonImagesHandler.getSingletonInstance().getGalleryParam() != null && NeonImagesHandler.getSingletonInstance().getGalleryParam().isRestrictedExtensionJpgPngEnabled()) {
-            mCursor = getContentResolver().query(uri, PROJECTION_BUCKET, MediaStore.Images.Media.MIME_TYPE + " in (?, ?)", new String[]{"image/jpeg", "image/png"}, orderBy);
+            mCursor = getContentResolver().query(uri, PROJECTION_BUCKET, MediaStore.Images.Media.MIME_TYPE + " in (?, ?, ?, ?)", new String[]{"image/jpeg", "image/png","image/jpg", "image/heic"}, orderBy);
         } else {
             mCursor = getContentResolver().query(uri, PROJECTION_BUCKET, null, null, orderBy);
         }
@@ -45,11 +46,13 @@ public abstract class NeonBaseGalleryActivity extends NeonBaseActivity {
         mCursor.moveToFirst();
 
 
+        Log.e("Anurag", mCursor.getCount()+"");
         if(mCursor.getCount() > 0){
             do {
                 String bucketId = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID));
 
                 int index = getBucketIndexWithId(bucketId);
+                Log.e("Anurag", index +" bucketId = "+bucketId);
                 if (index == -1) {
                     BucketModel bucketModel = new BucketModel();
                     bucketModel.setBucketId(bucketId);
@@ -78,8 +81,8 @@ public abstract class NeonBaseGalleryActivity extends NeonBaseActivity {
         String orderBy = MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
 
         String selection = MediaStore.Images.Media.BUCKET_ID + " =? and " + MediaStore.Images.Media.SIZE + " >? and "
-                + MediaStore.Images.Media.MIME_TYPE + " in (?, ?)";
-        String[] selectionArgs = new String[]{bucketId, String.valueOf(0), "image/jpeg", "image/png"};
+                + MediaStore.Images.Media.MIME_TYPE + " in (?, ?, ?, ?)";
+        String[] selectionArgs = new String[]{bucketId, String.valueOf(0), "image/jpeg", "image/png", "image/jpg", "image/heic"};
         if(bucketId == null){
             selection = null;
             selectionArgs = null;

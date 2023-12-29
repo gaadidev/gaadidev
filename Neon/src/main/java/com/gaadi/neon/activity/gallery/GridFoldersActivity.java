@@ -195,24 +195,30 @@ public class GridFoldersActivity extends NeonBaseGalleryActivity {
         PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
 
         try {
-            askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
-                @Override
-                public void onResult(boolean permissionGranted) {
-                    if (permissionGranted) {
-                        ActivityGridFoldersBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_folders, frameLayout, true);
-                        ImagesFoldersAdapter adapter = new ImagesFoldersAdapter(GridFoldersActivity.this, getImageBuckets());
-                        binder.gvFolders.setAdapter(adapter);
-                    } else {
-                        if (NeonImagesHandler.getSingletonInstance().isNeutralEnabled()) {
-                            finish();
-                        }else{
-                            NeonImagesHandler.getSingletonInstance().sendImageCollectionAndFinish(GridFoldersActivity.this,
-                                    ResponseCode.Write_Permission_Error);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                askForPermissionIfNeeded(permissionType, new OnPermissionResultListener() {
+                    @Override
+                    public void onResult(boolean permissionGranted) {
+                        if (permissionGranted) {
+                            ActivityGridFoldersBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_folders, frameLayout, true);
+                            ImagesFoldersAdapter adapter = new ImagesFoldersAdapter(GridFoldersActivity.this, getImageBuckets());
+                            binder.gvFolders.setAdapter(adapter);
+                        } else {
+                            if (NeonImagesHandler.getSingletonInstance().isNeutralEnabled()) {
+                                finish();
+                            }else{
+                                NeonImagesHandler.getSingletonInstance().sendImageCollectionAndFinish(GridFoldersActivity.this,
+                                        ResponseCode.Write_Permission_Error);
+                            }
+                            Toast.makeText(GridFoldersActivity.this, R.string.permission_error, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(GridFoldersActivity.this, R.string.permission_error, Toast.LENGTH_SHORT).show();
                     }
-                }
-            });
+                });
+            } else {
+                ActivityGridFoldersBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_folders, frameLayout, true);
+                ImagesFoldersAdapter adapter = new ImagesFoldersAdapter(GridFoldersActivity.this, getImageBuckets());
+                binder.gvFolders.setAdapter(adapter);
+            }
         } catch (ManifestPermission manifestPermission) {
             manifestPermission.printStackTrace();
         }
