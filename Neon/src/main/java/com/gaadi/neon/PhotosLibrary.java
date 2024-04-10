@@ -15,6 +15,7 @@ import com.gaadi.neon.interfaces.IGalleryParam;
 import com.gaadi.neon.interfaces.INeutralParam;
 import com.gaadi.neon.interfaces.LivePhotosListener;
 import com.gaadi.neon.interfaces.OnImageCollectionListener;
+import com.gaadi.neon.interfaces.OnSortingSelectedListener;
 import com.gaadi.neon.model.PhotosMode;
 import com.gaadi.neon.util.FileInfo;
 import com.gaadi.neon.util.NeonException;
@@ -50,6 +51,27 @@ public class PhotosLibrary {
                                      PhotosMode photosMode, OnImageCollectionListener listener)
             throws NullPointerException, NeonException {
         NeonImagesHandler.getSingletonInstance().setImageResultListener(listener);
+        NeonImagesHandler.getSingletonInstance().setLibraryMode(libraryMode);
+        NeonImagesHandler.getSingletonInstance().setRequestCode(requestCode);
+        validate(activity, photosMode, listener);
+        List<FileInfo> alreadyAddedImages = photosMode.getParams().getAlreadyAddedImages();
+        if (alreadyAddedImages != null) {
+            NeonImagesHandler.getSingletonInstance().setImagesCollection(alreadyAddedImages);
+        }
+        if (photosMode.getParams() instanceof INeutralParam) {
+            startNeutralActivity(activity, photosMode);
+        } else if (photosMode.getParams() instanceof ICameraParam) {
+            startCameraActivity(activity, photosMode);
+        } else if (photosMode.getParams() instanceof IGalleryParam) {
+            startGalleryActivity(activity, photosMode);
+        }
+    }
+
+    public static void collectSortedPhotos(int requestCode, Context activity, LibraryMode libraryMode,
+                                           PhotosMode photosMode, OnImageCollectionListener listener, OnSortingSelectedListener sortingListener)
+            throws NullPointerException, NeonException {
+        NeonImagesHandler.getSingletonInstance().setImageResultListener(listener);
+        NeonImagesHandler.getSingletonInstance().setSortingSelectedListener(sortingListener);
         NeonImagesHandler.getSingletonInstance().setLibraryMode(libraryMode);
         NeonImagesHandler.getSingletonInstance().setRequestCode(requestCode);
         validate(activity, photosMode, listener);
@@ -110,6 +132,7 @@ public class PhotosLibrary {
         switch (galleryParams.getGalleryViewType()) {
             case Folder_Alphabetical_Sorted:
             case Grid_Structure:
+            case Sorting_Enabled_Structure:
                 Intent gridGalleryIntent;
                 if (galleryParams.enableFolderStructure()) {
                     gridGalleryIntent = new Intent(activity, GridFoldersActivity.class);

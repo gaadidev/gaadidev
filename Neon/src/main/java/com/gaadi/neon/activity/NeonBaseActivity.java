@@ -12,6 +12,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
 
     protected FrameLayout frameLayout;
     protected Toolbar toolbar;
+    protected TextView sortFilter;
     private OnPermissionResultListener permissionResultListener;
     private final int permissionRequestCode=1;
 
@@ -47,6 +49,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_base);
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        sortFilter = (TextView) findViewById(R.id.sortFilter);
 
         if(toolbar!=null){
             setSupportActionBar(toolbar);

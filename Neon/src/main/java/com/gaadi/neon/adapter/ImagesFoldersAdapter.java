@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gaadi.neon.activity.gallery.GridFilesActivity;
 import com.gaadi.neon.activity.gallery.HorizontalFilesActivity;
+import com.gaadi.neon.enumerations.Sorting_Type;
 import com.gaadi.neon.model.BucketModel;
 import com.gaadi.neon.util.Constants;
 import com.gaadi.neon.util.NeonImagesHandler;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import static com.gaadi.neon.enumerations.GalleryType.Folder_Alphabetical_Sorted;
+import static com.gaadi.neon.enumerations.GalleryType.Sorting_Enabled_Structure;
 
 /**
  * Created by Lakshay on 27-02-2015.
@@ -52,6 +54,13 @@ public class ImagesFoldersAdapter extends BaseAdapter {
             });
 
         }
+
+        if(NeonImagesHandler.getSingletonInstance().getGalleryParam() != null
+            && NeonImagesHandler.getSingletonInstance().getGalleryParam().getCustomParameters() != null
+            && NeonImagesHandler.getSingletonInstance().getGalleryParam().getCustomParameters().getFolderSortingType() != null){
+            sortData(NeonImagesHandler.getSingletonInstance().getGalleryParam().getCustomParameters().getFolderSortingType());
+        }
+
     }
 
     @Override
@@ -129,4 +138,35 @@ public class ImagesFoldersAdapter extends BaseAdapter {
     }
 
 
+    public void updateData(ArrayList<BucketModel> folders, Sorting_Type sortingType){
+        this.folders.clear();
+        this.folders.addAll(folders);
+        sortData(sortingType);
+        notifyDataSetChanged();
+    }
+
+    private void sortData(Sorting_Type sortingType){
+        if(NeonImagesHandler.getSingletonInstance().getGalleryParam() != null
+                && NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() != null&&
+                NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() == Sorting_Enabled_Structure) {
+
+            if(sortingType == Sorting_Type.Alphabetical_Ascending || sortingType == Sorting_Type.Alphabetical_Descending) {
+                Collections.sort(folders, new Comparator<BucketModel>() {
+                    @Override
+                    public int compare(BucketModel bucketModel1, BucketModel bucketModel2) {
+                        if (bucketModel1 == null || bucketModel1.getBucketName() == null) {
+                            return (bucketModel2 == null || bucketModel2.getBucketName() == null) ? 0 : -1;
+                        }
+                        if (bucketModel2 == null || bucketModel2.getBucketName() == null) {
+                            return 1;
+                        }
+                        if (sortingType == Sorting_Type.Alphabetical_Descending) {
+                            return -1 * bucketModel1.getBucketName().compareToIgnoreCase(bucketModel2.getBucketName());
+                        }
+                        return bucketModel1.getBucketName().compareToIgnoreCase(bucketModel2.getBucketName());
+                    }
+                });
+            }
+        }
+    }
 }

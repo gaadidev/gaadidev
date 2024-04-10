@@ -888,7 +888,13 @@ public class CameraFragment1 extends Fragment implements View.OnTouchListener, C
 
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                int compression = 100;
+                if(NeonImagesHandler.getSingletonInstance().getCameraParam().getCustomParameters() != null &&
+                        NeonImagesHandler.getSingletonInstance().getCameraParam().getCustomParameters().getImageCompressionValue() != 0) {
+                    compression =  NeonImagesHandler.getSingletonInstance().getCameraParam().getCustomParameters().getImageCompressionValue();
+                }
+                Log.i("Shivam","compression value is ->" + compression);
+                bm.compress(Bitmap.CompressFormat.JPEG, compression, stream);
                 byte[] byteArray = stream.toByteArray();
                 fos.write(byteArray);
                 //fos.write(data);

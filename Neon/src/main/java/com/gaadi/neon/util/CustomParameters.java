@@ -1,5 +1,7 @@
 package com.gaadi.neon.util;
 
+import com.gaadi.neon.enumerations.Sorting_Type;
+
 /**
  * @author princebatra
  * @version 1.0
@@ -12,6 +14,9 @@ public class CustomParameters {
     private boolean locationRestrictive = true;
     private boolean showTagImage;
     private boolean hideTagImageReview;
+    private Sorting_Type folderSortingType;
+    private Sorting_Type fileSortingType;
+    private int imageCompressionValue;
 
     private CustomParameters(CustomParametersBuilder builder) {
         this.hideCameraButtonInNeutral = builder.hideCameraButtonInNeutral;
@@ -19,6 +24,9 @@ public class CustomParameters {
         this.locationRestrictive = builder.locationRestrictive;
         this.showTagImage = builder.showTagImage;
         this.hideTagImageReview = builder.hideTagImageReview;
+        this.folderSortingType = builder.folderSortingType;
+        this.fileSortingType = builder.fileSortingType;
+        this.imageCompressionValue= builder.imageCompressionValue;
     }
 
     public boolean gethideCameraButtonInNeutral() {
@@ -41,6 +49,12 @@ public class CustomParameters {
         return hideTagImageReview;
     }
 
+    public Sorting_Type getFolderSortingType() { return folderSortingType; }
+
+    public Sorting_Type getFileSortingType() { return fileSortingType; }
+
+    public int getImageCompressionValue() { return imageCompressionValue; }
+
     public static class CustomParametersBuilder {
 
         private boolean hideCameraButtonInNeutral;
@@ -48,6 +62,9 @@ public class CustomParameters {
         private boolean locationRestrictive = true;
         private boolean showTagImage;
         private boolean hideTagImageReview;
+        private Sorting_Type folderSortingType;
+        private Sorting_Type fileSortingType;
+        private int imageCompressionValue;
 
         public CustomParametersBuilder sethideCameraButtonInNeutral(boolean hide) {
             this.hideCameraButtonInNeutral = hide;
@@ -71,6 +88,21 @@ public class CustomParameters {
 
         public CustomParametersBuilder hideTagImageReview(boolean hideReview) {
             this.hideTagImageReview = hideReview;
+            return this;
+        }
+
+        public CustomParametersBuilder setFolderSortingType(Sorting_Type sorting){
+            this.folderSortingType = sorting;
+            return this;
+        }
+
+        public CustomParametersBuilder setFileSortingType(Sorting_Type sorting){
+            this.fileSortingType = sorting;
+            return this;
+        }
+
+        public CustomParametersBuilder setImageCompressionValue(int compressionValue){
+            this.imageCompressionValue = compressionValue;
             return this;
         }
 

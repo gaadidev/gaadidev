@@ -16,6 +16,7 @@ import com.gaadi.neon.interfaces.IParam;
 import com.gaadi.neon.interfaces.LivePhotoNextTagListener;
 import com.gaadi.neon.interfaces.LivePhotosListener;
 import com.gaadi.neon.interfaces.OnImageCollectionListener;
+import com.gaadi.neon.interfaces.OnSortingSelectedListener;
 import com.gaadi.neon.model.ImageTagModel;
 import com.gaadi.neon.model.NeonResponse;
 import com.scanlibrary.R;
@@ -41,6 +42,7 @@ public class NeonImagesHandler {
     private OnImageCollectionListener imageResultListener;
     private LivePhotosListener livePhotosListener;
     private LivePhotoNextTagListener livePhotoNextTagListener;
+    private OnSortingSelectedListener sortingSelectedListener;
     private String currentTag = "";
     private LibraryMode libraryMode;
     private int requestCode;
@@ -112,6 +114,13 @@ public class NeonImagesHandler {
         this.livePhotoNextTagListener = livePhotoNextTagListener;
     }
 
+    public OnSortingSelectedListener getSortingSelectedListener(){
+        return sortingSelectedListener;
+    }
+
+    public void setSortingSelectedListener(OnSortingSelectedListener sortingSelectedListener){
+        this.sortingSelectedListener = sortingSelectedListener;
+    }
 
     public String getCurrentTag() {
         return currentTag;

@@ -119,4 +119,10 @@ public class GridFilesAdapter extends BaseAdapter {
         ImageView transparentLayer;
         ImageView selection_view;
     }
+
+    public void updateData(ArrayList<FileInfo> _fileInfos){
+        this.fileInfos.clear();
+        this.fileInfos.addAll(_fileInfos);
+        notifyDataSetChanged();
+    }
 }

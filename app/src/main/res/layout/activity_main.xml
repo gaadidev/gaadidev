@@ -27,6 +27,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:text="Camera Compression"
+            android:onClick="compressionCameraClicked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
 
 
         <Button
@@ -49,6 +55,12 @@
             android:layout_height="wrap_content"/>
 
         <Button
+            android:onClick="gridSortingFolderClicked"
+            android:text="Grid Structure with Sorting (Folders)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
             android:onClick="gridOnlyFilesClicked"
             android:text="Grid only Structure (Files)"
             android:layout_width="wrap_content"
@@ -58,6 +70,12 @@
         <Button
             android:onClick="gridPriorityFilesClicked"
             android:text="Grid priority Structure (Files)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:onClick="gridSortingFilesClicked"
+            android:text="Grid Structure With Sorting (Files)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -107,6 +125,13 @@
             android:text="Neutral"
             android:onClick="neutralClicked"
             android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:text="Neutral with Sorting"
+            android:onClick="neutralSortedClicked"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

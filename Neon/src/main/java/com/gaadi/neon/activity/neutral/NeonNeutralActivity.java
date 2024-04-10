@@ -116,133 +116,261 @@ public class NeonNeutralActivity extends NeonBaseNeutralActivity {
         }
         if (id == R.id.addPhotoCamera) {
             try {
-                PhotosLibrary.collectPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setCameraMode().setParams(new ICameraParam() {
-                    @Override
-                    public CameraFacing getCameraFacing() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraFacing();
-                    }
+                if(NeonImagesHandler.getSingletonInstance().getNeutralParam().getGalleryViewType() == GalleryType.Sorting_Enabled_Structure){
+                    PhotosLibrary.collectSortedPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setCameraMode().setParams(new ICameraParam() {
+                        @Override
+                        public CameraFacing getCameraFacing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraFacing();
+                        }
 
-                    @Override
-                    public CameraOrientation getCameraOrientation() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraOrientation();
-                    }
+                        @Override
+                        public CameraOrientation getCameraOrientation() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraOrientation();
+                        }
 
-                    @Override
-                    public boolean getFlashEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getFlashEnabled();
-                    }
+                        @Override
+                        public boolean getFlashEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getFlashEnabled();
+                        }
 
-                    @Override
-                    public boolean getCameraSwitchingEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraSwitchingEnabled();
-                    }
+                        @Override
+                        public boolean getCameraSwitchingEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraSwitchingEnabled();
+                        }
 
-                    @Override
-                    public boolean getVideoCaptureEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getVideoCaptureEnabled();
-                    }
+                        @Override
+                        public boolean getVideoCaptureEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getVideoCaptureEnabled();
+                        }
 
-                    @Override
-                    public CameraType getCameraViewType() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraViewType();
-                    }
+                        @Override
+                        public CameraType getCameraViewType() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraViewType();
+                        }
 
-                    @Override
-                    public boolean cameraToGallerySwitchEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().cameraToGallerySwitchEnabled();
-                    }
+                        @Override
+                        public boolean cameraToGallerySwitchEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().cameraToGallerySwitchEnabled();
+                        }
 
-                    @Override
-                    public int getNumberOfPhotos() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
-                    }
+                        @Override
+                        public int getNumberOfPhotos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
+                        }
 
-                    @Override
-                    public boolean getTagEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
-                    }
+                        @Override
+                        public boolean getTagEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
+                        }
 
-                    @Override
-                    public List<ImageTagModel> getImageTagsModel() {
-                        return NeonImagesHandler.getSingletonInstance().getImageRequiredTags();
-                    }
+                        @Override
+                        public List<ImageTagModel> getImageTagsModel() {
+                            return NeonImagesHandler.getSingletonInstance().getImageRequiredTags();
+                        }
 
-                    @Override
-                    public List<FileInfo> getAlreadyAddedImages() {
-                        return null;
-                    }
+                        @Override
+                        public List<FileInfo> getAlreadyAddedImages() {
+                            return null;
+                        }
 
-                    @Override
-                    public boolean enableImageEditing() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
-                    }
+                        @Override
+                        public boolean enableImageEditing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
+                        }
 
-                    @Override
-                    public CustomParameters getCustomParameters() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
-                    }
-                }), NeonImagesHandler.getSingletonInstance().getImageResultListener());
+                        @Override
+                        public CustomParameters getCustomParameters() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
+                        }
+                    }), NeonImagesHandler.getSingletonInstance().getImageResultListener(), NeonImagesHandler.getSingletonInstance().getSortingSelectedListener());
+                }else {
+                    PhotosLibrary.collectPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setCameraMode().setParams(new ICameraParam() {
+                        @Override
+                        public CameraFacing getCameraFacing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraFacing();
+                        }
+
+                        @Override
+                        public CameraOrientation getCameraOrientation() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraOrientation();
+                        }
+
+                        @Override
+                        public boolean getFlashEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getFlashEnabled();
+                        }
+
+                        @Override
+                        public boolean getCameraSwitchingEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraSwitchingEnabled();
+                        }
+
+                        @Override
+                        public boolean getVideoCaptureEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getVideoCaptureEnabled();
+                        }
+
+                        @Override
+                        public CameraType getCameraViewType() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCameraViewType();
+                        }
+
+                        @Override
+                        public boolean cameraToGallerySwitchEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().cameraToGallerySwitchEnabled();
+                        }
+
+                        @Override
+                        public int getNumberOfPhotos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
+                        }
+
+                        @Override
+                        public boolean getTagEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
+                        }
+
+                        @Override
+                        public List<ImageTagModel> getImageTagsModel() {
+                            return NeonImagesHandler.getSingletonInstance().getImageRequiredTags();
+                        }
+
+                        @Override
+                        public List<FileInfo> getAlreadyAddedImages() {
+                            return null;
+                        }
+
+                        @Override
+                        public boolean enableImageEditing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
+                        }
+
+                        @Override
+                        public CustomParameters getCustomParameters() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
+                        }
+                    }), NeonImagesHandler.getSingletonInstance().getImageResultListener());
+                }
             } catch (NeonException e) {
                 e.printStackTrace();
             }
         } else if (id == R.id.addPhotoGallary) {
             try {
-                PhotosLibrary.collectPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setGalleryMode().setParams(new IGalleryParam() {
-                    @Override
-                    public boolean selectVideos() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().selectVideos();
-                    }
+                if(NeonImagesHandler.getSingletonInstance().getNeutralParam().getGalleryViewType() == GalleryType.Sorting_Enabled_Structure){
+                    PhotosLibrary.collectSortedPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setGalleryMode().setParams(new IGalleryParam() {
+                        @Override
+                        public boolean selectVideos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().selectVideos();
+                        }
 
-                    @Override
-                    public GalleryType getGalleryViewType() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getGalleryViewType();
-                    }
+                        @Override
+                        public GalleryType getGalleryViewType() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getGalleryViewType();
+                        }
 
-                    @Override
-                    public boolean enableFolderStructure() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableFolderStructure();
-                    }
+                        @Override
+                        public boolean enableFolderStructure() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableFolderStructure();
+                        }
 
-                    @Override
-                    public boolean galleryToCameraSwitchEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().galleryToCameraSwitchEnabled();
-                    }
+                        @Override
+                        public boolean galleryToCameraSwitchEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().galleryToCameraSwitchEnabled();
+                        }
 
-                    @Override
-                    public boolean isRestrictedExtensionJpgPngEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().isRestrictedExtensionJpgPngEnabled();
-                    }
+                        @Override
+                        public boolean isRestrictedExtensionJpgPngEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().isRestrictedExtensionJpgPngEnabled();
+                        }
 
-                    @Override
-                    public int getNumberOfPhotos() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
-                    }
+                        @Override
+                        public int getNumberOfPhotos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
+                        }
 
-                    @Override
-                    public boolean getTagEnabled() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
-                    }
+                        @Override
+                        public boolean getTagEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
+                        }
 
-                    @Override
-                    public List<ImageTagModel> getImageTagsModel() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getImageTagsModel();
-                    }
+                        @Override
+                        public List<ImageTagModel> getImageTagsModel() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getImageTagsModel();
+                        }
 
-                    @Override
-                    public List<FileInfo> getAlreadyAddedImages() {
-                        return null;
-                    }
+                        @Override
+                        public List<FileInfo> getAlreadyAddedImages() {
+                            return null;
+                        }
 
-                    @Override
-                    public boolean enableImageEditing() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
-                    }
+                        @Override
+                        public boolean enableImageEditing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
+                        }
 
-                    @Override
-                    public CustomParameters getCustomParameters() {
-                        return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
-                    }
-                }), NeonImagesHandler.getSingletonInstance().getImageResultListener());
+                        @Override
+                        public CustomParameters getCustomParameters() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
+                        }
+                    }), NeonImagesHandler.getSingletonInstance().getImageResultListener(), NeonImagesHandler.getSingletonInstance().getSortingSelectedListener());
+                }else {
+                    PhotosLibrary.collectPhotos(NeonImagesHandler.getSingletonInstance().getRequestCode(), this, NeonImagesHandler.getSingletonInstance().getLibraryMode(), PhotosMode.setGalleryMode().setParams(new IGalleryParam() {
+                        @Override
+                        public boolean selectVideos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().selectVideos();
+                        }
+
+                        @Override
+                        public GalleryType getGalleryViewType() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getGalleryViewType();
+                        }
+
+                        @Override
+                        public boolean enableFolderStructure() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableFolderStructure();
+                        }
+
+                        @Override
+                        public boolean galleryToCameraSwitchEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().galleryToCameraSwitchEnabled();
+                        }
+
+                        @Override
+                        public boolean isRestrictedExtensionJpgPngEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().isRestrictedExtensionJpgPngEnabled();
+                        }
+
+                        @Override
+                        public int getNumberOfPhotos() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getNumberOfPhotos();
+                        }
+
+                        @Override
+                        public boolean getTagEnabled() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getTagEnabled();
+                        }
+
+                        @Override
+                        public List<ImageTagModel> getImageTagsModel() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getImageTagsModel();
+                        }
+
+                        @Override
+                        public List<FileInfo> getAlreadyAddedImages() {
+                            return null;
+                        }
+
+                        @Override
+                        public boolean enableImageEditing() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().enableImageEditing();
+                        }
+
+                        @Override
+                        public CustomParameters getCustomParameters() {
+                            return NeonImagesHandler.getSingletonInstance().getNeutralParam().getCustomParameters();
+                        }
+                    }), NeonImagesHandler.getSingletonInstance().getImageResultListener());
+                }
             } catch (NeonException e) {
                 e.printStackTrace();
             }

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -17,9 +20,12 @@ import com.gaadi.neon.adapter.GridFilesAdapter;
 import com.gaadi.neon.enumerations.CameraFacing;
 import com.gaadi.neon.enumerations.CameraOrientation;
 import com.gaadi.neon.enumerations.CameraType;
+import com.gaadi.neon.enumerations.GalleryType;
 import com.gaadi.neon.enumerations.ResponseCode;
+import com.gaadi.neon.enumerations.Sorting_Type;
 import com.gaadi.neon.interfaces.ICameraParam;
 import com.gaadi.neon.interfaces.OnPermissionResultListener;
+import com.gaadi.neon.model.BucketModel;
 import com.gaadi.neon.model.ImageTagModel;
 import com.gaadi.neon.model.PhotosMode;
 import com.gaadi.neon.util.Constants;
@@ -38,6 +44,7 @@ import java.util.List;
 public class GridFilesActivity extends NeonBaseGalleryActivity {
 
     List<FileInfo> recentelyImageCollection;
+    GridFilesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +244,15 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
     }
 
     private void bindXml() {
+        if(NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() == GalleryType.Sorting_Enabled_Structure){
+            sortFilter.setVisibility(View.VISIBLE);
+            sortFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showSortingOptions(v);
+                }
+            });
+        }
 
         PermissionType permissionType = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? PermissionType.read_external_storage:PermissionType.write_external_storage;
 
@@ -247,7 +263,11 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
                     public void onResult(boolean permissionGranted) {
                         if (permissionGranted) {
                             ActivityGridFilesBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_files, frameLayout, true);
-                            GridFilesAdapter adapter = new GridFilesAdapter(GridFilesActivity.this, getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId)));
+                            adapter = new GridFilesAdapter(GridFilesActivity.this,
+                                    NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() == GalleryType.Sorting_Enabled_Structure ?
+                                        getSortedFilesFromBucketId(getIntent().getStringExtra(Constants.BucketId),NeonImagesHandler.getSingletonInstance().getGalleryParam().getCustomParameters().getFileSortingType()) :
+                                            getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId))
+                            );
                             binder.gvFolderPhotos.setAdapter(adapter);
                         } else {
                             if (NeonImagesHandler.getSingletonInstance().isNeutralEnabled()) {
@@ -262,11 +282,48 @@ public class GridFilesActivity extends NeonBaseGalleryActivity {
                 });
             } else {
                 ActivityGridFilesBinding binder = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_grid_files, frameLayout, true);
-                GridFilesAdapter adapter = new GridFilesAdapter(GridFilesActivity.this, getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId)));
+                adapter = new GridFilesAdapter(GridFilesActivity.this,
+                        NeonImagesHandler.getSingletonInstance().getGalleryParam().getGalleryViewType() == GalleryType.Sorting_Enabled_Structure ?
+                                getSortedFilesFromBucketId(getIntent().getStringExtra(Constants.BucketId),NeonImagesHandler.getSingletonInstance().getGalleryParam().getCustomParameters().getFileSortingType()) :
+                                getFileFromBucketId(getIntent().getStringExtra(Constants.BucketId))
+                );
                 binder.gvFolderPhotos.setAdapter(adapter);
             }
         } catch (ManifestPermission manifestPermission) {
             manifestPermission.printStackTrace();
+        }
+    }
+
+    private void showSortingOptions(View v) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu_sort, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Sorting_Type sorting  = Sorting_Type.Date_Descending;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_sort_date_desc) {
+                    sorting = Sorting_Type.Date_Descending;
+                } else if (itemId == R.id.action_sort_date_asc) {
+                    sorting = Sorting_Type.Date_Ascending;
+                } else if (itemId == R.id.action_sort_alphabet_desc) {
+                    sorting = Sorting_Type.Alphabetical_Descending;
+                } else if (itemId == R.id.action_sort_alphabet_asc) {
+                    sorting = Sorting_Type.Alphabetical_Ascending;
+                }
+                updateFileData(sorting);
+                return true;
+            }
+        });
+        popupMenu.show();
+    }
+
+    private void updateFileData(Sorting_Type sortingType){
+        NeonImagesHandler.getSingletonInstance().getSortingSelectedListener().onFileSortingSelected(sortingType);
+        ArrayList<FileInfo> sortedFiles = getSortedFilesFromBucketId(getIntent().getStringExtra(Constants.BucketId),sortingType);
+        if(sortedFiles != null){
+            adapter.updateData(sortedFiles);
         }
     }
 }
