@@ -62,11 +62,7 @@ ext {
     siteUrl = 'https://github.com/gaadidev/Neon-android-native'
     gitUrl = 'https://github.com/gaadidev/Neon-android-native'
 
-    libraryVersion = '4.2.0'
-
-    developerId = 'lakshay'
-    developerName = 'Lakshay Girdhar'
-    developerEmail = 'lakshay148@gmail.com'
+    libraryVersion = '4.2.8'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
