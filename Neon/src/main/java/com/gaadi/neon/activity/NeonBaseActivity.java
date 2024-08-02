@@ -39,7 +39,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected TextView sortFilter;
     private OnPermissionResultListener permissionResultListener;
-    private final int permissionRequestCode=1;
+    private final int permissionRequestCode = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,11 +51,11 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         sortFilter = (TextView) findViewById(R.id.sortFilter);
 
-        if(toolbar!=null){
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_left_arrow);
         }
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left_arrow);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -65,7 +65,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     @Override
     public void setTitle(CharSequence title) {
         SpannableString s = new SpannableString(title);
-        s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this,R.color.neon_toolbar_icons_color)), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.neon_toolbar_icons_color)), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         super.setTitle(s);
     }
 
@@ -85,7 +85,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
 
         permissionResultListener = listener;
 
-        switch (permissionType){
+        switch (permissionType) {
             case read_calender:
                 goForPermission(new String[]{Manifest.permission.READ_CALENDAR});
                 break;
@@ -153,7 +153,9 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                 goForPermission(new String[]{Manifest.permission.RECEIVE_MMS});
                 break;
             case read_external_storage:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    goForPermission(new String[]{Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED, Manifest.permission.READ_MEDIA_IMAGES});
+                } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
                     goForPermission(new String[]{Manifest.permission.READ_MEDIA_IMAGES});
                 } else {
                     goForPermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE});
@@ -176,7 +178,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                } else {
-                    goForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                goForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
 //                }
                 break;
 
@@ -187,18 +189,18 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
 
     }
 
-    private void goForPermission(String[] permissionName) throws ManifestPermission{
+    private void goForPermission(String[] permissionName) throws ManifestPermission {
 
-        if(!mentionedInManifest(permissionName[0])){
-            throw new ManifestPermission(getString(R.string.manifest_permission_error,permissionName[0]));
+        if (!mentionedInManifest(permissionName[0])) {
+            throw new ManifestPermission(getString(R.string.manifest_permission_error, permissionName[0]));
         }
 
-        if((android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) ||
-                (ContextCompat.checkSelfPermission(this,permissionName[0]) == PackageManager.PERMISSION_GRANTED)){
+        if ((android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) ||
+                (ContextCompat.checkSelfPermission(this, permissionName[0]) == PackageManager.PERMISSION_GRANTED)) {
             permissionResultListener.onResult(true);
             return;
         }
-        ActivityCompat.requestPermissions(this,permissionName,permissionRequestCode);
+        ActivityCompat.requestPermissions(this, permissionName, permissionRequestCode);
     }
 
     @Override
@@ -210,6 +212,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED);
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -227,8 +230,7 @@ public abstract class NeonBaseActivity extends AppCompatActivity {
     }
 
 
-    private boolean mentionedInManifest(String permission)
-    {
+    private boolean mentionedInManifest(String permission) {
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_PERMISSIONS);
             if (info.requestedPermissions != null) {
