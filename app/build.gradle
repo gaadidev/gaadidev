@@ -29,6 +29,7 @@ android {
 //            signingConfig signingConfigs.config
         }
     }
+    namespace 'com.customise.gaadi.camera'
 }
 
 dependencies {
