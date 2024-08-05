@@ -54,10 +54,9 @@ afterEvaluate {
     publishing {
         publications {
             maven(MavenPublication) {
-                //from components.java
                 groupId = 'com.github.usedcar-dev'
                 artifactId = 'Neon-android-native'
-                version = '4.3.4'
+                version = '4.3.5'
             }
         }
     }
