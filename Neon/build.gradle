@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 android {
     compileSdk Integer.parseInt(project.COMPILE_SDK_VERSION)
@@ -39,8 +40,8 @@ tasks.withType(Javadoc) {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
-    implementation 'com.google.android.gms:play-services-location:15.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
     implementation "androidx.exifinterface:exifinterface:$exifinterfaceVersion"
     implementation "androidx.appcompat:appcompat:$appCompactVersion"
     implementation "com.google.android.material:material:$materialSupportVersion"
@@ -62,9 +63,21 @@ ext {
     siteUrl = 'https://github.com/gaadidev/Neon-android-native'
     gitUrl = 'https://github.com/gaadidev/Neon-android-native'
 
-    libraryVersion = '4.2.8'
+    libraryVersion = '4.3.6'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = 'com.github.usedcar-dev'
+                artifactId = 'Neon-android-native'
+                version = '4.3.6'
+            }
+        }
+    }
 }

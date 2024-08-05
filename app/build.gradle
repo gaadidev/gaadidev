@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'maven-publish'
+
 
 android {
     compileSdk Integer.parseInt(project.COMPILE_SDK_VERSION)
@@ -48,16 +48,4 @@ dependencies {
     implementation "com.google.android.material:material:$materialSupportVersion"
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                groupId = 'com.github.usedcar-dev'
-                artifactId = 'Neon-android-native'
-                version = '4.3.5'
-            }
-        }
-    }
 }
