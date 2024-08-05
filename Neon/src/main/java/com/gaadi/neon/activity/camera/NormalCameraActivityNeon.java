@@ -45,7 +45,6 @@ import com.gaadi.neon.util.ManifestPermission;
 import com.gaadi.neon.util.NeonException;
 import com.gaadi.neon.util.NeonImagesHandler;
 import com.gaadi.neon.util.PermissionType;
-import com.scanlibrary.BuildConfig;
 import com.scanlibrary.R;
 import com.scanlibrary.databinding.NormalCameraActivityLayoutBinding;
 
